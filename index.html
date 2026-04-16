@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мёд Алтая</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdf5e6;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #5d4037;
+            overflow-x: hidden;
+        }
+
+        /* Шапка опущена ниже */
+        header {
+            width: 100%;
+            height: 150px; 
+            background: url('https://raw.githubusercontent.com/h55835406-hash/Mrwnjajaja/main/headmed.png') no-repeat center bottom 10px;
+            background-size: contain;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end; /* Кнопки прижаты к низу шапки */
+            padding-bottom: 25px;
+        }
+
+        header img {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        /* Пчела и облачко */
+        .bee-container {
+            position: fixed;
+            width: 60px;
+            z-index: 200;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .bee-img { width: 100%; }
+
+        .speech-bubble {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 2px solid #ffa000;
+            border-radius: 15px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #ffa000 transparent;
+            transform: translateX(-50%);
+        }
+
+        /* Сетка товаров */
+        .catalog {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .product-card h4 { margin: 10px 0 5px; font-size: 16px; }
+
+        .product-card img {
+            width: 100%;
+            border-radius: 15px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 10px 0;
+        }
+
+        .btn-plus-minus {
+            background: #ffa000;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Улучшенное модальное окно */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(93, 64, 55, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff8e1;
+            width: 80%;
+            padding: 25px;
+            border-radius: 30px;
+            border: 4px solid #ffa000;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .phone-link {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ef6c00;
+            text-decoration: none;
+            display: block;
+            margin: 20px 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bee-sound" src="https://raw.githubusercontent.com/h55835406-hash/Mrwnjajaja/main/Voicy__Hi_%20Roblox.mp3"></audio>
+
+    <div class="bee-container" id="my-bee">
+        <div class="speech-bubble" id="bubble">Привет!</div>
+        <img src="https://raw.githubusercontent.com/h55835406-hash/Mrwnjajaja/main/bee.png" class="bee-img">
+    </div>
+
+    <header>
+        <img src="https://raw.githubusercontent.com/h55835406-hash/Mrwnjajaja/main/korzinkabut.png">
+        <img src="https://raw.githubusercontent.com/h55835406-hash/Mrwnjajaja/main/paybut.png" onclick="openCart()">
+    </header>
+
+    <div class="catalog">
+        <script>
+            const titles = ["Мёд Горный", "Мёд Луговой", "Мёд Лесной", "Мёд Гречишный"];
+            for(let i=0; i<4; i++) {
+                document.write(`
+                    <div class="product-card">
+                        <img src="https://raw.githubusercontent.com/h55835406-hash/Mrwnjajaja/main/photo.png">
+                        <h4>${titles[i]}</h4>
+                        <div class="controls">
+                            <button class="btn-plus-minus" onclick="updateCart('${titles[i]}', -1)">-</button>
+                            <span id="q-${i}">0</span>
+                            <button class="btn-plus-minus" onclick="updateCart('${titles[i]}', 1)">+</button>
+                        </div>
+                        <p style="color:#a1887f; font-size:12px;">ваш текст здесь</p>
+                    </div>
+                `);
+            }
+        </script>
+    </div>
+
+    <div id="modal">
+        <div class="modal-content">
+            <h2 style="color:#ffa000; margin-top:0;">Ваш заказ</h2>
+            <div id="cart-list" style="text-align: left; margin-bottom: 20px; min-height: 50px;"></div>
+            <p>Для заказа позвоните нам:</p>
+            <a href="tel:+79996303376" class="phone-link">+7 (999) 630-33-76</a>
+            <button onclick="closeCart()" style="background:#5d4037; color:#fff; border:none; padding:10px 30px; border-radius:10px;">Закрыть</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = {};
+        const phrases = ["Привет!", "Уже определился?", "Покупай!", "Самый вкусный мёд!", "Жу-жу-жу!"];
+        
+        // Логика пчелы
+        const bee = document.getElementById('my-bee');
+        const bubble = document.getElementById('bubble');
+        const sound = document.getElementById('bee-sound');
+
+        function moveBee() {
+            const x = Math.random() * (window.innerWidth - 60);
+            const y = Math.random() * (window.innerHeight - 60);
+            bee.style.left = x + 'px';
+            bee.style.top = y + 'px';
+        }
+
+        function speak() {
+            bubble.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            bubble.style.display = 'block';
+            sound.play().catch(e => console.log("Нужен клик для звука"));
+            
+            setTimeout(() => {
+                bubble.style.display = 'none';
+                setTimeout(speak, 5000); // пауза 5 сек перед новой фразой
+            }, 5000); // висит 5 сек
+        }
+
+        setInterval(moveBee, 3000);
+        setTimeout(speak, 2000);
+
+        // Корзина
+        function updateCart(name, change) {
+            if (!cart[name]) cart[name] = 0;
+            cart[name] += change;
+            if (cart[name] < 0) cart[name] = 0;
+            
+            // Находим индекс товара для обновления цифры
+            const titles = ["Мёд Горный", "Мёд Луговой", "Мёд Лесной", "Мёд Гречишный"];
+            const idx = titles.indexOf(name);
+            document.getElementById(`q-${idx}`).innerText = cart[name];
+        }
+
+        function openCart() {
+            const list = document.getElementById('cart-list');
+            list.innerHTML = '';
+            let empty = true;
+            for (let item in cart) {
+                if(cart[item] > 0) {
+                    list.innerHTML += `<div style="border-bottom:1px dashed #ffa000;
+
