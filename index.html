@@ -130,7 +130,7 @@
 
         function updateCart(n, c, i) { if(isOrderQueued) return; cart[n] = (cart[n] || 0) + c; if (cart[n] < 0) cart[n] = 0; document.getElementById(`q-${i}`).innerText = cart[n]; }
 
-        const phrases = ["Привет!", "Выбрал мёд?", "Покупай!"];
+"        const phrases = ["🐝 ", "🫪🫪", "🍯🐻", "🫩✌️", "😁🤞", "🦉", "☣️☢️", "🫨"];
         function beeSpeak() { const b = document.getElementById('bee-bubble'); b.innerText = phrases[Math.floor(Math.random()*phrases.length)]; b.style.display='block'; document.getElementById('bee-sound').play().catch(()=>{}); setTimeout(()=>{ b.style.display='none'; setTimeout(beeSpeak,5000); },5000); }
         setTimeout(beeSpeak, 2000);
 
